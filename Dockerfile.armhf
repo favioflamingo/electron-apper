@@ -1,0 +1,26 @@
+FROM docker.e-flamingo.net:5000/armhf/raspbian:jessie
+
+MAINTAINER Joel DeJesus "dejesus.joel@e-flamingo.net"
+
+ARG proxy
+ARG branch
+ARG append
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN useradd -ms /bin/bash builder
+
+RUN if [ -z ${proxy+x} ]; then echo "Going WITHOUT an apt proxy" 1>&2; else echo "Acquire::http::Proxy \"http://$proxy\";" > /etc/apt/apt.conf.d/proxy.conf && echo "Going WITH an apt proxy" 1>&2 ; fi 
+
+COPY node-install.sh /usr/local/bin/node-install
+
+RUN /usr/local/bin/node-install && apt-get install -y nodejs sudo \
+  libgtk2.0-0 libx11-xcb1 libxtst6 libxss1 libgconf-2-4 libnss3 \
+  libasound2 libgl1-mesa-dev \
+  git-core build-essential pkg-config
+
+RUN usermod -aG video builder
+
+RUN npm install electron -g && npm install -g electron-installer-debian && npm install electron-packager -g
+
+CMD ["/bin/bash"]
