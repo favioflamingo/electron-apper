@@ -6,8 +6,10 @@ Before starting, the user building the kernel inside the container may have a di
 To build:
 
 ```
-docker build -t electron-apper:latest  --build-arg proxy="repository.e-flamingo.net:3142" --network ef-test -f Dockerfile.amd64 .
+docker build -t electron-apper:latest  -f Dockerfile.amd64 .
 ```
+
+#  --build-arg proxy="repository.e-flamingo.net:3142" --network ef-test
 
 
 To run:
