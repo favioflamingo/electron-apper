@@ -15,8 +15,17 @@ docker build -t electron-apper:latest  -f Dockerfile.amd64 .
 To run:
 
 ```
-docker run --rm=true  --network ef-test --name electron-apper.run --privileged -v /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket -v /dev/bus/usb:/dev/bus/usb -v /tmp/.X11-unix:/tmp/.X11-unix -v /tmp/.XIM-unix:/tmp/.XIM-unix -v /tmp/.font-unix:/tmp/.font-unix -v /tmp/.ICE-unix:/tmp/.ICE-unix -e DISPLAY=$DISPLAY -v $HOME/localwork:/home/builder/localwork/ -it electron-apper:latest /bin/bash
+export LOCALDIR=/home/joel/localwork
 
+docker run --rm=true  --name electron-apper.run --privileged \
+  -v /tmp/.X11-unix:/tmp/.X11-unix -v /tmp/.XIM-unix:/tmp/.XIM-unix \
+  -v /tmp/.font-unix:/tmp/.font-unix -v /tmp/.ICE-unix:/tmp/.ICE-unix \
+  -v $LOCALDIR:/home/builder/localwork/ \
+  -e DISPLAY=$DISPLAY \
+  -it electron-apper:latest /bin/bash
+
+sudo su builder
+cd $HOME/localwork
 
 ```
 
